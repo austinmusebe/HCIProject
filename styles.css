@@ -1,0 +1,126 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family:'Monsterrat', sans-serif ;
+}
+/* sorting out the navbar */
+.navbar{
+    /* background: #5131bc; */
+    background-color: #5f3acd;
+    height: 5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+#navbar__logo{
+    padding-top: 20px;
+    padding-right: 250px;
+    height:80%;
+    width: 100%;
+}
+.navbar__container{
+    display: flex;
+    justify-content: center;
+    height: 5rem;
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 50px;
+}
+#navbar__logo{
+    
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 2rem;
+}
+.navbar__menu{
+    display: flex;
+    align-items: center;
+    list-style: none;
+    text-align: center;
+}
+
+.navbar__item{
+    height: 80px;
+}
+.navbar__links{
+    color:#fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    padding: 0 1rem;
+    height: 100%;
+}
+.navbar__links:hover{
+    color:#bcabef;
+    transition: all 0.3s ease;
+}
+
+/* hero section */
+.main{
+    background-color: #5f3acd;
+}
+.main__container{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-self: center;
+    margin: 0 auto;
+    height: 90vh;
+    background-color: #5f3acd;
+    z-index: 1;
+    width: 100%;
+    max-width: 1300px;
+    padding: 0 50px;
+}
+.main__content h1{
+    font-size: 3rem;
+    background-color: #bcabef;
+    background-image: linear-gradient(to right,#ffffff,#8e7bca);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
+.main__content h3{
+    font-size: 1.2rem;
+    background-image: linear-gradient(to right,#ffffff,#8e7bca);
+    background-size: 100%;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -moz-text-fill-color: transparent;
+}
+#main__img{
+    height: 80%;
+    width: 100%;
+}
+.start__button{
+    background: #5f3acd;
+    position: fixed;
+    padding: 10px 36px;
+    margin: 2.5rem 0;
+    font-size: 2rem;
+    border-radius: 18px;
+    border-color: #fff;
+    margin-top: 2rem;
+    cursor: pointer;
+    transition: all 0.35s;
+    outline: none;
+    color: #d6cafc;
+}
