@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moodnest</title>
+    <title>Breathe</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-    
 </head>
-<body class="main-page">
+<body class="breathe-page">
     <!-- Navigation Bar Section -->
     <nav class="navbar">
         <div class="navbar__container">
@@ -26,7 +21,7 @@
                     <a href="/" class="navbar__links">Home</a>
                 </li>
                 <li class="navbar__item">
-                    <a href="/breath.html" class="navbar__links">Relax</a>
+                    <a href="/" class="navbar__links">Relax</a>
                 </li>
                 <li class="navbar__item">
                     <a href="/" class="navbar__links">Daily Mood Log</a>
@@ -37,23 +32,35 @@
             </ul>
         </div>
     </nav>
-    <!-- Hero Section (main body) -->
-    <div class="main">
-        <div class="main__container">
-            <div class="main__content">
-                <h1>revitalise your body <br> and mind</h1>
-                <h3>your companion to helping you become <br>
-                     the best version of yourself</h3>
-                     <!-- <div class="button__container">
-                        <button class="start__button">get started</button>
-                    </div> -->
+    <!-- Hero Section -->
+    <div class="breathing__text">
+        <h1 class="breathe__title">Breathe</h1>
+     <h2 class="breathe__text">Pause. Inhale. Exhale.
+        <br>
+        This page is your space to slow down and find calm. 
+        <br>
+        Follow the guided breathing timer to center yourself, reduce stress,
+        <br>
+        and regain focus. Just a few deep breaths can make a 
+        <br>
+        difference—helping you reset, relax, and feel more present.
+        <br>
+        Whenever life feels overwhelming, come here, breathe deeply, and let go.</h2>
+
+    </div>
+    <div class="breath__timer">
+        <div class="rectangle__container">
+            <p class="inhale__state">Inhale... Exhale</p> 
+            <br>
+            <div class="countdown__section">
+                <div class="time">
+                <h2 class="seconds" id="countdown">10:00</h2>
+                <small>seconds</small>
+                </div>
             </div>
-            <div class="main__imgContainer">
-                <img src="yoga.png" id="main__img">
-            </div>      
         </div>
     </div>
-
+     
 
     <script src="app.js"></script>
 </body>
