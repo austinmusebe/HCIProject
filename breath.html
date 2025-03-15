@@ -1,67 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Breathe</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body class="breathe-page">
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="breathe-page">
     <!-- Navigation Bar Section -->
     <nav class="navbar">
-        <div class="navbar__container">
-            <a href="/" ><img src="logo.png" id="navbar__logo"></a>
-            <div class="navbar__toggle" id="mobile-menu">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
-            <ul class="navbar__menu">
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Home</a>
-                </li>
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Relax</a>
-                </li>
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Daily Mood Log</a>
-                </li>
-                <li class="navbar__item">
-                    <a href="/" class="navbar__links">Resource Hub</a>
-                </li>
-            </ul>
+      <div class="navbar__container">
+        <a href="/"><img src="logo.png" id="navbar__logo" /></a>
+        <div class="navbar__toggle" id="mobile-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
         </div>
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Relax</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Daily Mood Log</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Resource Hub</a>
+          </li>
+        </ul>
+      </div>
     </nav>
     <!-- Hero Section -->
     <div class="breathing__text">
-        <h1 class="breathe__title">Breathe</h1>
-     <h2 class="breathe__text">Pause. Inhale. Exhale.
-        <br>
-        This page is your space to slow down and find calm. 
-        <br>
+      <h1 class="breathe__title">Breathe</h1>
+      <h2 class="breathe__text">
+        Pause. Inhale. Exhale.
+        <br />
+        This page is your space to slow down and find calm.
+        <br />
         Follow the guided breathing timer to center yourself, reduce stress,
-        <br>
-        and regain focus. Just a few deep breaths can make a 
-        <br>
+        <br />
+        and regain focus. Just a few deep breaths can make a
+        <br />
         difference—helping you reset, relax, and feel more present.
-        <br>
-        Whenever life feels overwhelming, come here, breathe deeply, and let go.</h2>
-
+        <br />
+        Whenever life feels overwhelming, come here, breathe deeply, and let go.
+      </h2>
     </div>
     <div class="breath__timer">
-        <div class="rectangle__container">
-            <p class="inhale__state">Inhale... Exhale</p> 
-            <br>
-            <div class="countdown__section">
-                <div class="time">
-                <h2 class="seconds" id="countdown">10:00</h2>
-                <small>seconds</small>
-                </div>
+      <div class="rectangle__container" id="rectangle__container">
+        <div class="countdown__section">
+          <div class="time">
+            <div class="total__time">
+              <h2>Total Time:</h2>
+              <h2 class="seconds" id="countdown">10:00</h2>
             </div>
+            <div class="inhale__exhale">
+              <p id="breath__state">Inhale... Exhale</p>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
-     
 
     <script src="app.js"></script>
-</body>
+  </body>
 </html>

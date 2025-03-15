@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.body.classList.contains("breathe-page")) {
         setInterval(updateCountdown, 1000); // Runs only on main-page
     }
+    if (document.body.classList.contains("breathe-page")) {
+        setInterval(calmingBreathing, 5000); // Runs only on main-page
+    }
 });
 
 function createCircle() {
@@ -43,4 +46,34 @@ function updateCountdown() {
     let seconds = time % 60;
     countdownElement.innerHTML = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     time--;
+    if (time < 0) {
+        return;
+    }
+}
+
+
+// Inhale/Exhale section
+
+
+let breathTime = 15;
+let isInhaling = true;
+function calmingBreathing() {
+    const breathingElement = document.getElementById("breath__state");
+    const breathRectangle = document.getElementById("rectangle__container");
+    if (!breathingElement) return;
+
+    if (isInhaling) {
+        breathRectangle.style.animation = "none";
+        void breathRectangle.offsetHeight;
+        breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
+        breathingElement.innerHTML = "inhale...";
+        breathRectangle.style.backgroundColor = "grey";
+    } else {
+        breathRectangle.style.animation = "none";
+        void breathRectangle.offsetHeight;
+        breathRectangle.style.animation = "fadeIn 4s ease-in";
+        breathingElement.innerHTML = "exhale...";
+        breathRectangle.style.backgroundColor = "gray";
+    }
+    isInhaling = !isInhaling;
 }
