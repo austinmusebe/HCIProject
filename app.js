@@ -6,10 +6,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.body.classList.contains("breathe-page")) {
         setInterval(updateCountdown, 1000); // Runs only on main-page
     }
-    if (document.body.classList.contains("breathe-page")) {
-        setInterval(calmingBreathing, 5000); // Runs only on main-page
-    }
+    // if (document.body.classList.contains("breathe-page")) {
+    //     setInterval(calmingBreathing, 5000); // Runs only on main-page
+    // }
 });
+
 
 function createCircle() {
     const circle = document.createElement("div");
@@ -57,23 +58,53 @@ function updateCountdown() {
 
 let breathTime = 15;
 let isInhaling = true;
-function calmingBreathing() {
-    const breathingElement = document.getElementById("breath__state");
-    const breathRectangle = document.getElementById("rectangle__container");
-    if (!breathingElement) return;
+let isOngoing = false;
+let breathingInterval = null;
 
-    if (isInhaling) {
-        breathRectangle.style.animation = "none";
-        void breathRectangle.offsetHeight;
-        breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
-        breathingElement.innerHTML = "inhale...";
-        breathRectangle.style.backgroundColor = "grey";
-    } else {
-        breathRectangle.style.animation = "none";
-        void breathRectangle.offsetHeight;
-        breathRectangle.style.animation = "fadeIn 4s ease-in";
-        breathingElement.innerHTML = "exhale...";
-        breathRectangle.style.backgroundColor = "gray";
+const breath__button = document.getElementById("breath__button");
+const breathingElement = document.getElementById("breath__state");
+const breathRectangle = document.getElementById("rectangle__container");
+
+breath__button.onclick =
+    function buttonToggle() {
+        isOngoing = !isOngoing;
+        if (isOngoing) {
+            breath__button.innerHTML = "Stop";
+            startBreathing();
+        }
+        else {
+            breath__button.innerHTML = "Start";
+            stopBreathing();
+        }
+
+
+
+
     }
-    isInhaling = !isInhaling;
+
+function startBreathing() {
+    if (!breathingElement || !breathRectangle) return;
+
+    breathingInterval = setInterval(() => {
+        if (isInhaling) {
+            breathRectangle.style.animation = "none";
+            void breathRectangle.offsetHeight;
+            breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
+            breathingElement.innerHTML = "inhale...";
+            breathRectangle.style.backgroundColor = "grey";
+        } else {
+            breathRectangle.style.animation = "none";
+            void breathRectangle.offsetHeight;
+            breathRectangle.style.animation = "fadeIn 4s ease-in";
+            breathingElement.innerHTML = "exhale...";
+            breathRectangle.style.backgroundColor = "gray";
+        }
+        isInhaling = !isInhaling;
+    }, 5_000);
+}
+
+function stopBreathing() {
+    clearInterval(breathingInterval);
+    breathRectangle.style.animation = "none";
+    // breathingElement.innerHTML = "";
 }

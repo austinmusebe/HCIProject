@@ -174,7 +174,6 @@ body, html{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 15px;
 }
 .total__time{
     display: flex;
@@ -184,6 +183,25 @@ body, html{
     font-size: 70px;
     font-weight: bold;
 }
+.button__container{
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    position: relative;
+}
+#breath__button{
+    /* background: #5f3acd; */
+    font-size: 1.2rem;
+    border-radius: 5px;
+    border-color: transparent;
+    margin-top: 2rem;
+    cursor: pointer;
+    transition: all 0.35s;
+    outline: none;
+    color: #000;
+}
+
+
 
 /* https://www.youtube.com/watch?v=uMZC-TzE8Vs  Ignoring this for now though*/
 @keyframes breathing__animation{
