@@ -2,12 +2,16 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family:'Lato', sans-serif ;
+    font-family: 'Poppins', sans-serif;
 }
 body, html{
     margin: 0;
     padding: 0;
     width: 100%;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    line-height: 1.4;
 }
 /* sorting out the navbar */
 .navbar {
@@ -18,9 +22,11 @@ body, html{
     justify-content: space-between; 
     padding: 0 50px;
     font-size: 1.2rem;
-    position: sticky;
+    position: fixed;
+    width: 100%;
     top: 0;
-    z-index: 999;
+    left: 0;
+    z-index: 1000;
 }
 
 #navbar__logo {
@@ -125,69 +131,104 @@ body, html{
     0% { opacity: 0.6; }
     100% { opacity: 0; }
 }
+
+/* Breathing Animations */
 @keyframes fadeOutBreath {
-    0% { opacity: 1; }
-    100% { opacity: 0.7; }
+    0% { opacity: 1; background-color: white; }
+    100% { opacity: 0.3; background-color: black; }
 }
-@keyframes fadeIn {
-    0% { opacity: 0.7; }
-    100% { opacity: 1; }
+
+@keyframes fadeInBreath {
+    0% { opacity: 0.3; background-color: black; }
+    100% { opacity: 1; background-color: white; }
 }
 
 
 
 /* Breathing Page */
-.breathe__page{
-    margin: auto;
-    justify-self: center;
-    justify-items: center;
-    align-items: center;
-    display: flex;
-}
-.breathe__title{
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-.breathe__text{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    padding-top: 2rem;
-    padding-bottom: 4rem;
-}
-.rectangle__container{
+.breathe__page {
     display: flex;
     flex-direction: column;
-    margin: auto;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(180deg, #f3e8ff, #d1c4e9);
+    text-align: center;
+    padding: 1.5rem;
+}
+.breathe__title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #5f3acd;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.breathe__text {
+    font-size: 1.2rem;
+    color: #4a3a79;
+    max-width: 700px;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 0 auto;
+
+}
+.breath__timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+    margin-top: 2rem;
+}
+.rectangle__container {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 700px;
-    height: 400px;
-    background: pink;
-    border-radius: 2000px;
+    width: 600px;
+    height: 350px;
+    background: linear-gradient(135deg, #a389d4, #7054b2);
+    border-radius: 25px;
+    padding: 2rem;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    color: white;
+    margin: 0 auto;
 }
-.time{
-    display:flex;
+.time {
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    font-size: 1.5rem;
 }
-.total__time{
+.total__time {
     display: flex;
-    z-index: 1;
-}
-.inhale__exhale{
-    font-size: 70px;
+    align-items: center;
+    gap: 1rem;
     font-weight: bold;
 }
-.button__container{
+
+.inhale__exhale {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-top: 1rem;
+    text-align: center;
+
+}
+.button__container {
+    display: flex;
     justify-content: center;
     align-items: center;
-    justify-items: center;
-    position: relative;
+    margin-top: 2rem;
+    width: 100%;
+
 }
 #breath__button{
     /* background: #5f3acd; */
@@ -200,6 +241,35 @@ body, html{
     outline: none;
     color: #000;
 }
+.modern-button {
+    background: linear-gradient(135deg, #8e7cc3, #5f3acd);
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 8px rgba(95, 58, 205, 0.3);
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modern-button:hover {
+    background: linear-gradient(135deg, #5f3acd, #8e7cc3);
+    box-shadow: 0 6px 12px rgba(95, 58, 205, 0.5);
+    transform: translateY(-2px);
+}
+.start__button__container{
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    margin-top: 2rem;
+
+}
+
 
 
 

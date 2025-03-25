@@ -5,8 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Breathe</title>
     <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
   </head>
-  <body class="breathe-page">
+  <body class="breathe__page">
     <!-- Navigation Bar Section -->
     <nav class="navbar">
       <div class="navbar__container">
@@ -18,13 +22,13 @@
         </div>
         <ul class="navbar__menu">
           <li class="navbar__item">
-            <a href="/" class="navbar__links">Home</a>
+            <a href="/index.html" class="navbar__links">Home</a>
           </li>
           <li class="navbar__item">
-            <a href="/" class="navbar__links">Relax</a>
+            <a href="/breath.html" class="navbar__links">Relax</a>
           </li>
           <li class="navbar__item">
-            <a href="/" class="navbar__links">Daily Mood Log</a>
+            <a href="/moodLog.html" class="navbar__links">Daily Mood Log</a>
           </li>
           <li class="navbar__item">
             <a href="/" class="navbar__links">Resource Hub</a>
@@ -49,21 +53,27 @@
         Whenever life feels overwhelming, come here, breathe deeply, and let go.
       </h2>
     </div>
-    <div class="breath__timer">
+    <div class="start__button__container">
+      <button id="startSessionButton" class="modern-button">
+        Start a breathing session?
+      </button>
+    </div>
+    <!-- Hidden Breathing Timer Section -->
+    <div class="breath__timer" id="breathingSection" style="display: none">
       <div class="rectangle__container" id="rectangle__container">
         <div class="countdown__section">
           <div class="time">
-            <div class="total__time">
+            <!-- <div class="total__time">
               <h2>Total Time:</h2>
               <h2 class="seconds" id="countdown">10:00</h2>
-            </div>
+            </div> -->
             <div class="inhale__exhale">
               <p id="breath__state">Inhale... Exhale</p>
             </div>
           </div>
         </div>
         <div class="button__container">
-          <button id="breath__button">Start</button>
+          <button id="breath__button" class="modern-button">Start</button>
         </div>
       </div>
     </div>

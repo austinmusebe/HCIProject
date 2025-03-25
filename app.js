@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setInterval(createCircle, 3500); // Runs only on breathe-page
     }
 
-    if (document.body.classList.contains("breathe-page")) {
+    if (document.body.classList.contains("breathe__page")) {
         setInterval(updateCountdown, 1000); // Runs only on main-page
     }
     // if (document.body.classList.contains("breathe-page")) {
@@ -65,6 +65,12 @@ const breath__button = document.getElementById("breath__button");
 const breathingElement = document.getElementById("breath__state");
 const breathRectangle = document.getElementById("rectangle__container");
 
+// Start Session Button Listener
+document.getElementById("startSessionButton").addEventListener("click", function () {
+    document.getElementById("breathingSection").style.display = "block";
+    this.style.display = "none";
+});
+
 breath__button.onclick =
     function buttonToggle() {
         isOngoing = !isOngoing;
@@ -77,30 +83,32 @@ breath__button.onclick =
             stopBreathing();
         }
 
-
-
-
     }
 
 function startBreathing() {
     if (!breathingElement || !breathRectangle) return;
+    isInhaling = true;
+    triggerBreathing();
+    breathingInterval = setInterval(triggerBreathing, 6000);
+}
 
-    breathingInterval = setInterval(() => {
-        if (isInhaling) {
-            breathRectangle.style.animation = "none";
-            void breathRectangle.offsetHeight;
-            breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
-            breathingElement.innerHTML = "inhale...";
-            breathRectangle.style.backgroundColor = "grey";
-        } else {
-            breathRectangle.style.animation = "none";
-            void breathRectangle.offsetHeight;
-            breathRectangle.style.animation = "fadeIn 4s ease-in";
-            breathingElement.innerHTML = "exhale...";
-            breathRectangle.style.backgroundColor = "gray";
-        }
-        isInhaling = !isInhaling;
-    }, 5_000);
+function triggerBreathing() {
+    if (isInhaling) {
+        breathRectangle.style.animation = "none";
+        void breathRectangle.offsetHeight;
+        breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
+        breathingElement.innerHTML = "inhale...";
+        breathRectangle.style.backgroundColor = "white";
+        breathingElement.style.color = "purple";
+    } else {
+        breathRectangle.style.animation = "none";
+        void breathRectangle.offsetHeight;
+        breathRectangle.style.animation = "fadeInBreath 6s ease-in";
+        breathingElement.innerHTML = "exhale...";
+        breathRectangle.style.backgroundColor = "black";
+        breathingElement.style.color = "purple";
+    }
+    isInhaling = !isInhaling;
 }
 
 function stopBreathing() {
