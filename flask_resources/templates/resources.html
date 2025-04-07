@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resource Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='/styles.css') }}"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -52,7 +55,11 @@
   <body>
     <nav class="navbar">
       <div class="navbar__container">
-        <a href="/"><img src="logo.png" id="navbar__logo" /></a>
+        <a href="/"
+          ><img
+            src="{{ url_for('static', filename='/logo.png') }}"
+            id="navbar__logo"
+        /></a>
         <div class="navbar__toggle" id="mobile-menu">
           <span class="bar"></span>
           <span class="bar"></span>

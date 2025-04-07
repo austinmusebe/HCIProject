@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Daily Mood Log</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .mood-icon {
+        transition: transform 0.3s ease;
+      }
+      .mood-icon:hover {
+        transform: scale(1.1);
+      }
+      body {
+        padding-top: 5rem;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, #f3e8ff, #d1c4e9);
+        font-family: "Poppins", sans-serif;
+      }
+      .content-wrapper {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .mood-icon.greyed-out {
+        opacity: 0.3;
+        filter: grayscale(100%);
+      }
+      .mood-icon.selected {
+        transform: scale(1.2);
+        border: 2px solid #5f3acd;
+        border-radius: 50%;
+      }
+      .reason-bubble {
+        transition: all 0.3s ease;
+        opacity: 0.4;
+        filter: grayscale(100%);
+        cursor: pointer;
+      }
+      .reason-bubble.selected {
+        opacity: 1;
+        filter: grayscale(0%);
+        transform: scale(1.05);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+    </style>
+  </head>
+  <body class="mood-page">
+    <nav class="navbar">
+      <div class="navbar__container">
+        <a href="/"
+          ><img
+            src="{{ url_for('static', filename='logo.png') }}"
+            id="navbar__logo"
+        /></a>
+        <div class="navbar__toggle" id="mobile-menu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar__menu">
+          <li class="navbar__item">
+            <a href="/" class="navbar__links">Home</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/breath.html" class="navbar__links">Relax</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/moodLog.html" class="navbar__links">Daily Mood Log</a>
+          </li>
+          <li class="navbar__item">
+            <a href="/resources.html" class="navbar__links">Resource Hub</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="content-wrapper">
+      <div class="container mx-auto px-4 py-8 flex flex-col items-center">
+        <div class="bg-white shadow-lg rounded-xl max-w-xl w-full p-8">
+          <h1 class="text-2xl font-bold text-purple-800 mb-6 text-center">
+            Daily Mood Log
+          </h1>
+          <p class="text-gray-600 text-center mb-6">
+            Take A Moment To Check In With Yourself. How Are You Feeling Today?
+          </p>
+
+          <form id="mood-form" method="POST" action="/moodLog.html">
+            <div class="flex justify-center space-x-4 mb-8">
+              <div class="mood-icon cursor-pointer" data-mood="angry">
+                <img
+                  src="{{ url_for('static', filename='emojis/angry.png') }}"
+                  alt="Angry"
+                  class="w-12 h-12"
+                />
+                <input
+                  type="radio"
+                  name="mood"
+                  value="angry"
+                  style="display: none"
+                />
+              </div>
+              <div class="mood-icon cursor-pointer" data-mood="sad">
+                <img
+                  src="{{ url_for('static', filename='emojis/sad.png') }}"
+                  alt="Sad"
+                  class="w-12 h-12"
+                />
+                <input
+                  type="radio"
+                  name="mood"
+                  value="sad"
+                  style="display: none"
+                />
+              </div>
+              <div class="mood-icon cursor-pointer" data-mood="neutral">
+                <img
+                  src="{{ url_for('static', filename='emojis/neutral.png') }}"
+                  alt="Neutral"
+                  class="w-12 h-12"
+                />
+                <input
+                  type="radio"
+                  name="mood"
+                  value="neutral"
+                  style="display: none"
+                />
+              </div>
+              <div class="mood-icon cursor-pointer" data-mood="happy">
+                <img
+                  src="{{ url_for('static', filename='emojis/happy.png') }}"
+                  alt="Happy"
+                  class="w-12 h-12"
+                />
+                <input
+                  type="radio"
+                  name="mood"
+                  value="happy"
+                  style="display: none"
+                />
+              </div>
+              <div class="mood-icon cursor-pointer" data-mood="very_happy">
+                <img
+                  src="{{ url_for('static', filename='emojis/very_happy.png') }}"
+                  alt="Very Happy"
+                  class="w-12 h-12"
+                />
+                <input
+                  type="radio"
+                  name="mood"
+                  value="very_happy"
+                  style="display: none"
+                />
+              </div>
+            </div>
+
+            <h2 class="text-xl text-purple-700 mb-4">
+              What's Influencing Your Mood?
+            </h2>
+            <div class="flex flex-wrap justify-center gap-3 mb-6">
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="friends"
+              >
+                Friends
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="friends"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="family"
+              >
+                Family
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="family"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="education"
+              >
+                Education
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="education"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="work"
+              >
+                Work
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="work"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="sleep"
+              >
+                Sleep
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="sleep"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="health"
+              >
+                Health
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="health"
+                  style="display: none"
+                />
+              </div>
+              <div
+                class="reason-bubble px-4 py-2 bg-purple-100 text-purple-800 rounded-full text-sm"
+                data-reason="diet"
+              >
+                Diet
+                <input
+                  type="checkbox"
+                  name="reasons"
+                  value="diet"
+                  style="display: none"
+                />
+              </div>
+            </div>
+
+            <h2 class="text-xl text-purple-700 mb-4">Let's write about it</h2>
+            <textarea
+              name="entry"
+              class="w-full p-4 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 h-32 resize-none"
+              placeholder="How is your day going? How has it affected your mood? Or anything else..."
+            ></textarea>
+
+            <div class="flex justify-center mt-6">
+              <button
+                type="submit"
+                class="bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition"
+              >
+                Save Mood Entry
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="fixed bottom-8 right-8 opacity-50">
+      <img
+        src="{{ url_for('static', filename='poses/yoga2.png') }}"
+        alt="Yoga Pose 1"
+        class="w-32 h-32"
+      />
+    </div>
+
+    <div class="fixed bottom-8 left-8 opacity-50">
+      <img
+        src="{{ url_for('static', filename='poses/yoga3.png') }}"
+        alt="Yoga Pose 2"
+        class="w-32 h-32 transform -scale-x-100"
+      />
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const moodIcons = document.querySelectorAll(".mood-icon");
+        const reasonBubbles = document.querySelectorAll(".reason-bubble");
+
+        moodIcons.forEach((icon) => {
+          icon.addEventListener("click", () => {
+            moodIcons.forEach((otherIcon) => {
+              otherIcon.classList.remove("selected");
+              otherIcon.classList.add("greyed-out");
+            });
+            icon.classList.add("selected");
+            icon.classList.remove("greyed-out");
+            icon.querySelector('input[name="mood"]').checked = true;
+          });
+        });
+
+        reasonBubbles.forEach((bubble) => {
+          bubble.addEventListener("click", () => {
+            bubble.classList.toggle("selected");
+            bubble.querySelector('input[name="reasons"]').checked =
+              !bubble.querySelector('input[name="reasons"]').checked;
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
