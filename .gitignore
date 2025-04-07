@@ -1,0 +1,4 @@
+venv/
+resources.db
+*.pyc
+__pycache__/
