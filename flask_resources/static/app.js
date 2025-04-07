@@ -96,14 +96,18 @@ function triggerBreathing() {
         breathRectangle.style.animation = "none";
         void breathRectangle.offsetHeight;
         breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
-        breathingElement.innerHTML = "Inhale...";
-        breathingElement.style.color = "#43a047"; // Green for inhale
+        breathingElement.innerHTML = "inhale...";
+        speakWhenBreathing("Breathe in");
+        breathRectangle.style.backgroundColor = "white";
+        breathingElement.style.color = "purple";
     } else {
         breathRectangle.style.animation = "none";
         void breathRectangle.offsetHeight;
         breathRectangle.style.animation = "fadeInBreath 6s ease-in";
-        breathingElement.innerHTML = "Exhale...";
-        breathingElement.style.color = "#d32f2f"; // Red for exhale
+        breathingElement.innerHTML = "exhale...";
+        speakWhenBreathing("Breathe out");
+        breathRectangle.style.backgroundColor = "black";
+        breathingElement.style.color = "purple";
     }
     isInhaling = !isInhaling;
 }
@@ -113,3 +117,20 @@ function stopBreathing() {
     breathRectangle.style.animation = "none";
     // breathingElement.innerHTML = "";
 }
+
+let ttsEnabled = false;
+const ttsBtn = document.getElementById("ttsToggleButton");
+const breathState = document.getElementById("breath__state");
+
+ttsBtn?.addEventListener("click", () => {
+    ttsEnabled = !ttsEnabled;
+    ttsBtn.textContent = ttsEnabled ? "🔊 Voice On" : "🔈 Toggle Voice";
+});
+
+const speakWhenBreathing = (text) => {
+    if (!ttsEnabled) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    speechSynthesis.speak(utterance);
+};
+

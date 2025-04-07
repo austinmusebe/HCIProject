@@ -98,6 +98,7 @@ function triggerBreathing() {
         void breathRectangle.offsetHeight;
         breathRectangle.style.animation = "fadeOutBreath 6s ease-out";
         breathingElement.innerHTML = "inhale...";
+        speakBreathingStep("Breathe in");
         breathRectangle.style.backgroundColor = "white";
         breathingElement.style.color = "purple";
     } else {
@@ -105,14 +106,38 @@ function triggerBreathing() {
         void breathRectangle.offsetHeight;
         breathRectangle.style.animation = "fadeInBreath 6s ease-in";
         breathingElement.innerHTML = "exhale...";
+        speakBreathingStep("Breathe out");
         breathRectangle.style.backgroundColor = "black";
         breathingElement.style.color = "purple";
     }
     isInhaling = !isInhaling;
 }
 
+
 function stopBreathing() {
     clearInterval(breathingInterval);
     breathRectangle.style.animation = "none";
     // breathingElement.innerHTML = "";
 }
+
+// TTS section
+let ttsEnabled = false;
+const ttsBtn = document.getElementById("ttsToggleButton");
+const breathState = document.getElementById("breath__state");
+
+ttsBtn?.addEventListener("click", () => {
+    ttsEnabled = !ttsEnabled;
+    ttsBtn.textContent = ttsEnabled ? "🔊 Voice On" : "🔈 Toggle Voice";
+});
+
+// Optional: Whenever you update the breathing text, speak it
+const speakBreathingStep = (text) => {
+    if (!ttsEnabled) return;
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    speechSynthesis.speak(utterance);
+};
+
+// Example usage (call this inside your breathing animation loop):
+// speakBreathingStep("Breathe in");
+// speakBreathingStep("Breathe out");

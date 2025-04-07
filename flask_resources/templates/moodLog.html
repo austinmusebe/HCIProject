@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Daily Mood Log</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
@@ -60,6 +61,82 @@
         filter: grayscale(0%);
         transform: scale(1.05);
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      #analysis-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border: 1px solid #ccc;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 1001;
+        border-radius: 8px;
+        text-align: center;
+        max-width: 80%;
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+      #analysis-popup h2 {
+        margin-bottom: 10px;
+        color: #5f3acd;
+      }
+      #analysis-popup p {
+        margin-bottom: 5px;
+      }
+      #analysis-popup ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 10px;
+      }
+      #analysis-popup ul li {
+        margin-bottom: 3px;
+      }
+      #analysis-popup button {
+        background-color: #d32f2f;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      #analysis-popup button:hover {
+        background-color: #b71c1c;
+      }
+      #mood-chart-container {
+        width: 100%;
+        margin: 20px auto;
+      }
+      .analyze-button-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+      }
+      #analyze-mood-button {
+        background-color: #5f3acd;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      #analyze-mood-button:hover {
+        background-color: #482898;
+      }
+      #overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
       }
     </style>
   </head>
@@ -268,6 +345,28 @@
               class="w-full p-4 border-2 border-purple-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-400 h-32 resize-none"
               placeholder="How is your day going? How has it affected your mood? Or anything else..."
             ></textarea>
+            <div class="flex justify-center mt-2">
+              <button
+                type="button"
+                id="start-recording"
+                class="bg-purple-400 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition flex items-center space-x-2 animate-none"
+              >
+                <svg
+                  class="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 1v22m6-6a6 6 0 01-12 0V5a6 6 0 0112 0v12z"
+                  />
+                </svg>
+                <span id="mic-label">Start Talking</span>
+              </button>
+            </div>
 
             <div class="flex justify-center mt-6">
               <button
@@ -280,6 +379,25 @@
           </form>
         </div>
       </div>
+    </div>
+
+    <div class="analyze-button-container">
+      <button id="analyze-mood-button" class="modern-button">
+        Analyze My Moods
+      </button>
+    </div>
+
+    <div id="overlay"></div>
+    <div id="analysis-popup">
+      <h2>Mood Analysis</h2>
+      <p><strong>Most Popular Mood:</strong> <span id="popular-mood"></span></p>
+      <p><strong>Top Reasons for This Mood:</strong></p>
+      <ul id="top-reasons"></ul>
+      <h3>Mood Trend</h3>
+      <div id="mood-chart-container">
+        <canvas id="moodChart"></canvas>
+      </div>
+      <button id="close-popup">Close</button>
     </div>
 
     <div class="fixed bottom-8 right-8 opacity-50">
@@ -300,8 +418,17 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        // Mood selection logic
         const moodIcons = document.querySelectorAll(".mood-icon");
         const reasonBubbles = document.querySelectorAll(".reason-bubble");
+        const analyzeButton = document.getElementById("analyze-mood-button");
+        const analysisPopup = document.getElementById("analysis-popup");
+        const closePopup = document.getElementById("close-popup");
+        const overlay = document.getElementById("overlay");
+        const popularMoodSpan = document.getElementById("popular-mood");
+        const topReasonsList = document.getElementById("top-reasons");
+        const moodChartCanvas = document.getElementById("moodChart");
+        let moodChart;
 
         moodIcons.forEach((icon) => {
           icon.addEventListener("click", () => {
@@ -322,6 +449,204 @@
               !bubble.querySelector('input[name="reasons"]').checked;
           });
         });
+
+        // Analysis popup logic
+        analyzeButton.addEventListener("click", () => {
+          fetch("/analyze_moods")
+            .then((response) => response.json())
+            .then((data) => {
+              popularMoodSpan.textContent =
+                data.most_popular_mood || "No data yet";
+              topReasonsList.innerHTML = "";
+
+              if (
+                data.most_frequent_reasons &&
+                data.most_frequent_reasons.length > 0
+              ) {
+                data.most_frequent_reasons.forEach((item) => {
+                  const li = document.createElement("li");
+                  li.textContent = `${item[0]} (${item[1]} times)`;
+                  topReasonsList.appendChild(li);
+                });
+              } else {
+                const li = document.createElement("li");
+                li.textContent = "No reasons selected for this mood.";
+                topReasonsList.appendChild(li);
+              }
+
+              // Prepare data for the chart
+              const moodLabels = data.mood_trend_data.map((item) =>
+                new Date(item.timestamp).toLocaleDateString()
+              );
+              const moodValues = data.mood_trend_data.map((item) => item.mood);
+
+              // Map mood strings to numerical values for the chart
+              const moodMapping = {
+                very_happy: 5,
+                happy: 4,
+                neutral: 3,
+                sad: 2,
+                angry: 1,
+              };
+              const moodNumbers = moodValues.map(
+                (mood) => moodMapping[mood] || 0
+              );
+
+              if (moodChart) {
+                moodChart.destroy(); // Destroy existing chart if it exists
+              }
+
+              moodChart = new Chart(moodChartCanvas.getContext("2d"), {
+                type: "line",
+                data: {
+                  labels: moodLabels,
+                  datasets: [
+                    {
+                      label: "Mood Over Time",
+                      data: moodNumbers,
+                      borderColor: "#5f3acd",
+                      backgroundColor: "rgba(95, 58, 205, 0.1)",
+                      fill: true,
+                      tension: 0.1,
+                    },
+                  ],
+                },
+                options: {
+                  responsive: true,
+                  scales: {
+                    y: {
+                      beginAtZero: true,
+                      max: 5,
+                      ticks: {
+                        stepSize: 1,
+                        callback: function (value) {
+                          const reverseMapping = {
+                            1: "Angry",
+                            2: "Sad",
+                            3: "Neutral",
+                            4: "Happy",
+                            5: "Very Happy",
+                          };
+                          return reverseMapping[value];
+                        },
+                      },
+                    },
+                  },
+                },
+              });
+
+              analysisPopup.style.display = "block";
+              overlay.style.display = "block";
+            })
+            .catch((error) => {
+              console.error("Error fetching mood analysis:", error);
+              alert("Could not fetch mood analysis.");
+            });
+        });
+
+        // Close popup functionality
+        closePopup.addEventListener("click", () => {
+          analysisPopup.style.display = "none";
+          overlay.style.display = "none";
+        });
+
+        // Close popup when clicking on overlay
+        overlay.addEventListener("click", () => {
+          analysisPopup.style.display = "none";
+          overlay.style.display = "none";
+        });
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const micButton = document.getElementById("start-recording");
+        const micLabel = document.getElementById("mic-label");
+        const textarea = document.querySelector('textarea[name="entry"]');
+
+        let recognition;
+        let isListening = false;
+        let silenceTimer = null;
+        let finalTranscript = "";
+
+        if (
+          "webkitSpeechRecognition" in window ||
+          "SpeechRecognition" in window
+        ) {
+          const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+          recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = "en-US";
+
+          recognition.onstart = () => {
+            isListening = true;
+            micLabel.textContent = "Listening... (Click to stop)";
+            micButton.classList.add("animate-pulse");
+            // Save the current text when starting recognition
+            finalTranscript = textarea.value || "";
+          };
+
+          recognition.onresult = (event) => {
+            let interimTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0].transcript;
+              if (event.results[i].isFinal) {
+                finalTranscript += " " + transcript;
+              } else {
+                interimTranscript += transcript;
+              }
+            }
+
+            // Trim any extra spaces
+            finalTranscript = finalTranscript.trim();
+
+            // Update the textarea with both final and interim text
+            textarea.value = finalTranscript + " " + interimTranscript;
+
+            // Reset silence timer on speech
+            if (silenceTimer) clearTimeout(silenceTimer);
+            silenceTimer = setTimeout(() => {
+              stopListening();
+            }, 4000); // Stop after 4 seconds of silence
+          };
+
+          recognition.onend = () => {
+            stopListening();
+          };
+
+          recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            stopListening();
+          };
+
+          function stopListening() {
+            if (!isListening) return;
+
+            recognition.stop();
+            isListening = false;
+            micLabel.textContent = "Start Talking";
+            micButton.classList.remove("animate-pulse");
+
+            if (silenceTimer) {
+              clearTimeout(silenceTimer);
+              silenceTimer = null;
+            }
+          }
+
+          micButton.addEventListener("click", () => {
+            if (!isListening) {
+              recognition.start();
+            } else {
+              stopListening();
+            }
+          });
+        } else {
+          micButton.disabled = true;
+          micLabel.textContent = "Speech Recognition not supported";
+          console.warn("Speech recognition not supported in this browser.");
+        }
       });
     </script>
   </body>
