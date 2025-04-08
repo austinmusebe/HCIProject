@@ -145,10 +145,8 @@
                   class="text-sm bg-red-100 text-red-800 px-3 py-1 rounded-full"
                   >Crisis Support</span
                 >
-                <a
-                  href="tel:988"
-                  class="text-purple-600 hover:underline font-bold"
-                  >Call 988</a
+                <a href="911" class="text-purple-600 hover:underline font-bold"
+                  >Call 911</a
                 >
               </div>
             </div>
@@ -388,8 +386,43 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        const categoryTabs = document.querySelectorAll(".category-tab");
+        const resourceCards = document.querySelectorAll(".resource-card");
+        const resourcesContainer = document.getElementById(
+          "resources-container"
+        );
         const form = document.getElementById("resource-form");
         const resourceDisplay = document.getElementById("resource-display");
+
+        // Function to filter resources based on category
+        function filterResources(category) {
+          resourceCards.forEach((card) => {
+            if (category === "all" || card.dataset.type === category) {
+              card.style.display = "block"; // Show the card
+            } else {
+              card.style.display = "none"; // Hide the card
+            }
+          });
+        }
+
+        // Initially show all resources
+        filterResources("all");
+
+        // Event listener for category tabs
+        categoryTabs.forEach((tab) => {
+          tab.addEventListener("click", function () {
+            const category = this.dataset.category;
+
+            // Remove active class from all tabs
+            categoryTabs.forEach((t) => t.classList.remove("active"));
+
+            // Add active class to the clicked tab
+            this.classList.add("active");
+
+            // Filter the resources
+            filterResources(category);
+          });
+        });
 
         form.addEventListener("submit", (event) => {
           event.preventDefault();
