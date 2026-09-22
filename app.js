@@ -127,17 +127,30 @@ const breathState = document.getElementById("breath__state");
 
 ttsBtn?.addEventListener("click", () => {
     ttsEnabled = !ttsEnabled;
-    ttsBtn.textContent = ttsEnabled ? "🔊 Voice On" : "🔈 Toggle Voice";
+    ttsBtn.textContent = ttsEnabled ? "voice on" : "toggle voice";
 });
 
-// Optional: Whenever you update the breathing text, speak it
-const speakBreathingStep = (text) => {
-    if (!ttsEnabled) return;
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
-    speechSynthesis.speak(utterance);
+let naturalVoice = null;
+const loadVoices = () => {
+    if (!("speechSynthesis" in window)) return;
+    const voices = window.speechSynthesis.getVoices() || [];
+    naturalVoice =
+        voices.find((v) => v.name.includes("Natural") || v.name.includes("Google") || v.name.includes("Neural")) ||
+        voices.find((v) => v.lang.startsWith("en"));
 };
 
-// Example usage (call this inside your breathing animation loop):
-// speakBreathingStep("Breathe in");
-// speakBreathingStep("Breathe out");
+if ("speechSynthesis" in window) {
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
+}
+
+const speakBreathingStep = (text) => {
+    if (!ttsEnabled || !("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    if (!naturalVoice) loadVoices();
+    if (naturalVoice) utterance.voice = naturalVoice;
+    utterance.rate = 0.85; // Slower, relaxed pacing
+    utterance.pitch = 0.95; // Warmer, soothing tone
+    window.speechSynthesis.speak(utterance);
+};
