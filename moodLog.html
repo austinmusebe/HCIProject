@@ -178,8 +178,32 @@
             placeholder="How is your day going? How has it affected your mood? Or anything else..."
           ></textarea>
 
+          <div class="flex justify-center mt-2">
+            <button
+              type="button"
+              id="start-recording"
+              class="bg-purple-400 text-white px-4 py-2 rounded-full hover:bg-purple-500 transition flex items-center space-x-2"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 1v22m6-6a6 6 0 01-12 0V5a6 6 0 0112 0v12z"
+                />
+              </svg>
+              <span id="mic-label">Start Talking</span>
+            </button>
+          </div>
+
           <div class="flex justify-center mt-6">
             <button
+              id="save-mood-button"
               class="bg-purple-600 text-white px-6 py-2 rounded-full hover:bg-purple-700 transition"
             >
               Save Mood Entry
@@ -227,6 +251,101 @@
             bubble.classList.toggle("selected");
           });
         });
+
+        // Speech-to-text live transcription
+        const micButton = document.getElementById("start-recording");
+        const micLabel = document.getElementById("mic-label");
+        const textarea = document.querySelector("textarea");
+
+        let recognition;
+        let isListening = false;
+        let silenceTimer = null;
+        let finalTranscript = "";
+
+        if (
+          "webkitSpeechRecognition" in window ||
+          "SpeechRecognition" in window
+        ) {
+          const SpeechRecognition =
+            window.SpeechRecognition || window.webkitSpeechRecognition;
+          recognition = new SpeechRecognition();
+          recognition.continuous = true;
+          recognition.interimResults = true;
+          recognition.lang = "en-US";
+
+          recognition.onstart = () => {
+            isListening = true;
+            micLabel.textContent = "Listening... (Click to stop)";
+            micButton.classList.add("animate-pulse");
+            finalTranscript = textarea.value || "";
+          };
+
+          recognition.onresult = (event) => {
+            let interimTranscript = "";
+
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              const transcript = event.results[i][0].transcript;
+              if (event.results[i].isFinal) {
+                finalTranscript += " " + transcript;
+              } else {
+                interimTranscript += transcript;
+              }
+            }
+
+            finalTranscript = finalTranscript.trim();
+            textarea.value =
+              finalTranscript +
+              (interimTranscript ? " " + interimTranscript : "");
+
+            if (silenceTimer) clearTimeout(silenceTimer);
+            silenceTimer = setTimeout(() => {
+              stopListening();
+            }, 4000);
+          };
+
+          recognition.onend = () => {
+            stopListening();
+          };
+
+          recognition.onerror = (event) => {
+            console.error("Speech recognition error:", event.error);
+            stopListening();
+          };
+
+          function stopListening() {
+            if (!isListening) return;
+
+            recognition.stop();
+            isListening = false;
+            micLabel.textContent = "Start Talking";
+            micButton.classList.remove("animate-pulse");
+
+            if (silenceTimer) {
+              clearTimeout(silenceTimer);
+              silenceTimer = null;
+            }
+          }
+
+          micButton.addEventListener("click", () => {
+            if (!isListening) {
+              recognition.start();
+            } else {
+              stopListening();
+            }
+          });
+        } else {
+          if (micButton) {
+            micButton.disabled = true;
+            micLabel.textContent = "Speech Recognition not supported";
+          }
+        }
+
+        const saveButton = document.getElementById("save-mood-button");
+        if (saveButton) {
+          saveButton.addEventListener("click", () => {
+            alert("Mood entry saved successfully!");
+          });
+        }
       });
     </script>
   </body>
